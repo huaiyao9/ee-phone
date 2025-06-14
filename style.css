@@ -1,0 +1,88 @@
+/* style.css */
+
+/* EPhone Launcher Button */
+#eephone-launcher-button {
+    /* 继承 menu_button 的基本样式 */
+    /* fa-solid fa-mobile-screen-button 已经是 FontAwesome 图标，无需额外设置 */
+    /* 按钮文本 */
+    color: var(--text-color); /* 使用Silly Tavern的文本颜色变量 */
+    font-size: 0.9em;
+    padding: 5px 10px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 文本和图标之间的间距 */
+    white-space: nowrap; /* 防止文本换行 */
+    cursor: pointer;
+    border-radius: var(--radius); /* 使用Silly Tavern的圆角变量 */
+    background-color: var(--button-color); /* 使用Silly Tavern的按钮背景色变量 */
+    border: 1px solid var(--button-border-color); /* 使用Silly Tavern的按钮边框颜色变量 */
+}
+
+#eephone-launcher-button:hover {
+    background-color: var(--button-hover-color); /* 使用Silly Tavern的按钮悬停背景色变量 */
+}
+
+/* EPhone Modal Overlay */
+.eephone-modal-overlay {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明黑色背景 */
+    z-index: 10000; /* 确保在Silly Tavern之上 */
+    justify-content: center;
+    align-items: center;
+}
+
+/* EPhone Modal Content */
+.eephone-modal-content {
+    background-color: var(--bg-color); /* 使用Silly Tavern的背景色变量 */
+    border-radius: var(--radius); /* 使用Silly Tavern的圆角变量 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    height: 90%;
+    max-width: 800px; /* 最大宽度 */
+    max-height: 600px; /* 最大高度 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color); /* 添加边框 */
+}
+
+/* EPhone Modal Header */
+.eephone-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--bg-color-alt); /* 使用Silly Tavern的备用背景色变量 */
+    border-bottom: 1px solid var(--border-color); /* 边框 */
+    color: var(--text-color); /* 文本颜色 */
+    font-weight: bold;
+}
+
+/* EPhone Close Button */
+.eephone-close-modal-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.eephone-close-modal-btn:hover {
+    color: var(--link-hover-color); /* 悬停颜色 */
+}
+
+/* EPhone Iframe */
+.eephone-iframe {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    background-color: var(--bg-color-code); /* 使用Silly Tavern的代码块背景色，或设置为白色 */
+}
