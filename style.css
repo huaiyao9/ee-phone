@@ -1,56 +1,56 @@
-/* style.css */
+/* style.css (EPhone 消息查看器插件) */
 
 /* EPhone Launcher Button */
 #eephone-launcher-button {
-    /* 继承 menu_button 的基本样式 */
-    /* fa-solid fa-mobile-screen-button 已经是 FontAwesome 图标，无需额外设置 */
-    /* 按钮文本 */
-    color: var(--text-color); /* 使用Silly Tavern的文本颜色变量 */
+    color: var(--text-color);
     font-size: 0.9em;
     padding: 5px 10px;
     margin-left: 5px;
-    display: flex;
+    display: flex; /* 确保Flex布局，使图标和文本并排 */
     align-items: center;
-    gap: 5px; /* 文本和图标之间的间距 */
-    white-space: nowrap; /* 防止文本换行 */
+    gap: 5px;
+    white-space: nowrap;
     cursor: pointer;
-    border-radius: var(--radius); /* 使用Silly Tavern的圆角变量 */
-    background-color: var(--button-color); /* 使用Silly Tavern的按钮背景色变量 */
-    border: 1px solid var(--button-border-color); /* 使用Silly Tavern的按钮边框颜色变量 */
+    border-radius: var(--radius);
+    background-color: var(--button-color);
+    border: 1px solid var(--button-border-color);
+    /* 确保按钮本身的z-index不会被其他元素遮挡，虽然它在leftSendForm里，但以防万一 */
+    z-index: 1000;
 }
 
 #eephone-launcher-button:hover {
-    background-color: var(--button-hover-color); /* 使用Silly Tavern的按钮悬停背景色变量 */
+    background-color: var(--button-hover-color);
 }
 
 /* EPhone Modal Overlay */
 .eephone-modal-overlay {
-    display: none; /* 默认隐藏 */
-    position: fixed;
+    display: none; /* 默认隐藏，JavaScript 会改为 'flex' 来显示 */
+    position: fixed; /* 固定定位，覆盖整个视口 */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7); /* 半透明黑色背景 */
-    z-index: 10000; /* 确保在Silly Tavern之上 */
-    justify-content: center;
-    align-items: center;
+    z-index: 99999; /* 极高的 z-index，确保它在所有其他元素之上 */
+    justify-content: center; /* 水平居中内容 */
+    align-items: center; /* 垂直居中内容 */
 }
 
 /* EPhone Modal Content */
 .eephone-modal-content {
-    background-color: var(--bg-color); /* 使用Silly Tavern的背景色变量 */
-    border-radius: var(--radius); /* 使用Silly Tavern的圆角变量 */
+    background-color: var(--bg-color); /* Silly Tavern 主题背景色 */
+    border-radius: var(--radius);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    width: 90%;
-    height: 90%;
+    width: 90%; /* 模态框宽度 */
+    height: 90%; /* 模态框高度 */
     max-width: 800px; /* 最大宽度 */
     max-height: 600px; /* 最大高度 */
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    flex-direction: column; /* 头部和iframe垂直排列 */
+    overflow: hidden; /* 防止内容溢出 */
     position: relative;
-    border: 1px solid var(--border-color); /* 添加边框 */
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(var(--SmartThemeBlurStrength, 5px)); /* 模糊背景，提供默认值 */
 }
 
 /* EPhone Modal Header */
@@ -59,10 +59,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 15px;
-    background-color: var(--bg-color-alt); /* 使用Silly Tavern的备用背景色变量 */
-    border-bottom: 1px solid var(--border-color); /* 边框 */
-    color: var(--text-color); /* 文本颜色 */
+    background-color: var(--bg-color-alt); /* Silly Tavern 备用背景色 */
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
     font-weight: bold;
+    font-size: 1.1em;
 }
 
 /* EPhone Close Button */
@@ -73,16 +74,17 @@
     font-size: 1.5em;
     cursor: pointer;
     padding: 0 5px;
+    line-height: 1;
 }
 
 .eephone-close-modal-btn:hover {
-    color: var(--link-hover-color); /* 悬停颜色 */
+    color: var(--link-color);
 }
 
 /* EPhone Iframe */
 .eephone-iframe {
-    flex-grow: 1;
     width: 100%;
+    flex-grow: 1; /* 让 iframe 填充剩余空间 */
     border: none;
-    background-color: var(--bg-color-code); /* 使用Silly Tavern的代码块背景色，或设置为白色 */
+    background-color: var(--bg-color); /* iframe 背景色 */
 }
