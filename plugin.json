@@ -1,7 +1,12 @@
 {
-  "name": "ee's Phone",
-  "script": "index.js",
-  "style": "styles.css",
-  "author": "ee",
-  "description": "独立悬浮手机界面"
+    "id": "eephone-plugin",
+    "name": "EPhone 消息查看器",
+    "description": "在Silly Tavern中以弹出窗口形式查看EPhone应用的内容。",
+    "author": "您的名字/组织",
+    "version": "1.0.0",
+    "tags": ["utility", "tools"],
+    "main": "main.js",
+    "dependencies": [],
+    "scripts": [],
+    "styles": []
 }
