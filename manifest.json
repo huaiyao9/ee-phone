@@ -1,12 +1,8 @@
 {
     "display_name": "EPhone 消息查看器",
     "loading_order": 100,
-    "requires": [],
-    "optional": [],
     "js": "index.js",
     "css": "style.css",
-    "author": "ee老师的小手机",
-    "version": "1.0.0",
-    "homePage": "https://github.com/huaiyao9/ee-phone.git",
-    "auto_update": false
+    "author": "ee老师",
+    "version": "1.0.0"
 }
