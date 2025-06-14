@@ -1,16 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "name": "ee's Phone Plugin",
-  "namespace": "ee.phone",
-  "version": "2.0.0",
-  "description": "在Silly Tavern中显示邦邦卡邦小手机界面",
-  "icon": "icon.svg",
-  "entry": "eePhone.js",
-  "tags": ["UI", "widget", "mobile"],
-  "author": "ee",
-  "url": "https://github.com/yourusername/ee-phone-plugin",
-  "requirements": {
-    "sillytavern": ">=1.9.0"
-  },
-  "permissions": ["DOM", "iframe"]
+  "entry": "index.js",
+  "resources": [
+    "styles.css",
+    "eePhone.html",
+    "icon.png"
+  ]
 }
