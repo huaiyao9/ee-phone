@@ -1,10 +1,10 @@
 // index.js
 
-// 修正后的导入 Silly Tavern 内部模块的路径。
-// 这些路径是基于插件位于 'third_party/ee-phone/' 目录的假设来修正的。
-import { animation_duration, eventSource, event_types } from '../../script.js';     // 修正路径
-import { power_user } from '../../power-user.js';                                 // 修正路径
-import { retriggerFirstMessageOnEmptyChat, getUserAvatar, getUserAvatars, setUserAvatar, user_avatar } from '../../personas.js'; // 修正路径
+// 再次修正导入 Silly Tavern 内部模块的路径。
+// 这些路径现在是根据您提供的准确路径 'public/scripts/extensions/third-party/ee-phone/' 来确定的。
+import { animation_duration, eventSource, event_types } from '../../../../script.js';     // 确认路径
+import { power_user } from '../../../power-user.js';                                 // 确认路径
+import { retriggerFirstMessageOnEmptyChat, getUserAvatar, getUserAvatars, setUserAvatar, user_avatar } from '../../../personas.js'; // 确认路径
 
 // 确保jQuery可用，Silly Tavern通常会全局暴露jQuery
 const $ = (window.jQuery || window.$);
@@ -126,7 +126,9 @@ if (!$) {
 
             try {
                 const PLUGIN_FOLDER_NAME = PLUGIN_ID; // 'ee-phone'
-                const eephoneHtmlPath = `./third_party/${PLUGIN_FOLDER_NAME}/eePhone.html`;
+                // 修正 iframe 加载 eePhone.html 的路径
+                // 这个路径是从 Silly Tavern 的根 URL 来计算的
+                const eephoneHtmlPath = `./public/scripts/extensions/third-party/${PLUGIN_FOLDER_NAME}/eePhone.html`;
                 console.log(`[${PLUGIN_NAME}] 尝试从路径: ${eephoneHtmlPath} 加载 eePhone.html`);
 
                 const response = await fetch(eephoneHtmlPath);
