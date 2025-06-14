@@ -1,43 +1,35 @@
 // index.js
 
-// 彻底移除所有 import 语句，因为它们可能导致脚本在某些环境中无法解析或执行。
-// 对于一个主要操作DOM和显示HTML的插件，通常不需要这些。
+// 恢复导入 Silly Tavern 内部模块。这在您的环境中可能是必需的。
+// 请注意，如果这些路径在您的特定 Silly Tavern 版本中不正确，可能会导致问题。
+import { animation_duration, eventSource, event_types } from '../../../../script.js';
+import { power_user } from '../../../power-user.js';
+import { retriggerFirstMessageOnEmptyChat, getUserAvatar, getUserAvatars, setUserAvatar, user_avatar } from '../../../personas.js';
 
-// --- 核心插件逻辑开始 ---
-(function() {
+// 确保jQuery可用，Silly Tavern通常会全局暴露jQuery
+const $ = (window.jQuery || window.$);
+
+if (!$) {
+    console.error('[EPhone Plugin] jQuery is not available. Plugin cannot initialize.');
+    // 如果jQuery不可用，直接返回，防止后续报错
+    // 对于依赖jQuery的插件，这通常是致命的
+    alert('EPhone 插件错误：jQuery 未加载。插件无法运行。'); // 弹出警报提醒用户
+    return;
+}
+
+
+(async function() {
     // 确保 PLUGIN_ID 与您的 Git 导入后的实际文件夹名称一致
-    const PLUGIN_ID = 'ee-phone'; // *** 确认：与 third_party 文件夹下的 'ee-phone' 匹配 ***
+    const PLUGIN_ID = 'ee-phone'; // *** 核心确认：与 third_party 文件夹下的 'ee-phone' 匹配 ***
     const PLUGIN_NAME = 'EPhone 消息查看器';
     const PLUGIN_VERSION = '1.0.0';
 
-    console.log(`[${PLUGIN_NAME}] 插件脚本开始执行...`);
+    console.log(`[${PLUGIN_NAME}] 插件脚本开始执行，尝试初始化...`);
 
-    // 优先检查jQuery，但我们的点击事件现在不依赖它
-    function getJQuery() {
-        if (window.jQuery) {
-            return window.jQuery;
-        }
-        console.warn(`[${PLUGIN_NAME}] jQuery (window.jQuery) is not immediately available. Some jQuery-dependent features might not work.`);
-        return null;
-    }
-
-    let $ = getJQuery(); // 仍然获取jQuery以用于DOM操作，但点击事件独立
-
-    // 在DOM内容完全加载后执行UI操作，确保Silly Tavern的基础结构已准备好
-    // 使用 document.readyState 检查以应对不同加载时机
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initPluginUI);
-    } else {
-        initPluginUI();
-    }
-
-    async function initPluginUI() {
-        $ = getJQuery(); // 再次尝试获取jQuery
-        if (!$) {
-            console.error(`[${PLUGIN_NAME}] DOMContentLoaded: jQuery is still not available. Some plugin features might be limited.`);
-            // 我们会继续尝试创建按钮，因为原生事件可以工作
-        }
-        console.log(`[${PLUGIN_NAME}] DOMContentLoaded: DOM 已就绪。开始创建插件UI.`);
+    // 使用 jQuery 的 $(function() { ... }) 或 $(document).ready()
+    // 这是 jQuery 推荐的在 DOM 完全加载并准备就绪后执行代码的方式
+    $(function() { // 等同于 $(document).ready(function() { ... });
+        console.log(`[${PLUGIN_NAME}] DOM就绪。开始创建插件UI.`);
 
         try {
             createEPhoneButton();
@@ -53,49 +45,42 @@
             console.error(`[${PLUGIN_NAME}] createEPhoneModal 函数执行时发生错误:`, e);
         }
 
-        // --- 核心修改：使用原生 JavaScript 事件监听器 ---
-        // 查找按钮元素
-        const buttonElement = document.getElementById('eephone-launcher-button');
-        if (buttonElement) {
-            buttonElement.addEventListener('click', function() {
-                console.log(`[${PLUGIN_NAME}] EPhone 按钮被点击 (原生事件)。尝试打开模态窗口...`);
-                try {
-                    openEPhoneModal();
-                } catch (e) {
-                    console.error(`[${PLUGIN_NAME}] openEPhoneModal 函数执行时发生错误:`, e);
-                }
-            });
-            console.log(`[${PLUGIN_NAME}] 原生点击事件监听器已附加到 #eephone-launcher-button。`);
-        } else {
-            console.error(`[${PLUGIN_NAME}] 错误: 无法找到 #eephone-launcher-button 元素以附加原生事件监听器。`);
-        }
+        // --- 核心修改：使用 jQuery 的事件委托，但绑定到 document ---
+        // 这种方式比绑定到 'body' 更能确保在任何 DOM 结构变更下都能捕获事件。
+        $(document).on('click', '#eephone-launcher-button', function(event) {
+            event.preventDefault(); // 尝试阻止默认行为，防止某些Silly Tavern行为干扰
+            console.log(`[${PLUGIN_NAME}] EPhone 按钮被点击 (jQuery Document 委托)。尝试打开模态窗口...`);
+            try {
+                openEPhoneModal();
+            } catch (e) {
+                console.error(`[${PLUGIN_NAME}] openEPhoneModal 函数执行时发生错误:`, e);
+            }
+        });
+        console.log(`[${PLUGIN_NAME}] jQuery document 委托点击事件监听器已附加。`);
 
         console.log(`[${PLUGIN_NAME}] 插件UI初始化流程完成。`);
-    }
+    });
 
 
     /**
      * 创建并添加EPhone按钮到Silly Tavern的界面
      */
     function createEPhoneButton() {
-        // 由于我们切换到原生事件，这里我们创建原生DOM元素，或者继续使用jQuery创建再转换为原生
-        // 为了兼容性，我们仍然使用jQuery来操作DOM，但事件绑定使用原生JS
-        const eephoneButtonHtml = `
+        const eephoneButton = $(`
             <div id="eephone-launcher-button" class="menu_button fa-solid fa-mobile-screen-button" title="打开EPhone">
                 EPhone
             </div>
-        `;
+        `);
 
         const leftSendForm = $('#leftSendForm');
         if (leftSendForm.length) {
-            leftSendForm.append(eephoneButtonHtml); // 仍使用jQuery append
+            leftSendForm.append(eephoneButton);
             console.log(`[${PLUGIN_NAME}] EPhone按钮已成功添加到 #leftSendForm.`);
         } else {
             console.warn(`[${PLUGIN_NAME}] 无法找到 #leftSendForm 元素，尝试添加到 body 作为备用。`);
-            $('body').append(eephoneButtonHtml);
+            $('body').append(eephoneButton);
         }
         console.log(`[${PLUGIN_NAME}] EPhone按钮 DOM 元素已创建。`);
-        // 注意：事件监听器现在在 initPluginUI 中通过原生 addEventListener 附加。
     }
 
     /**
@@ -124,7 +109,6 @@
             console.error(`[${PLUGIN_NAME}] 错误: 模态框或iframe元素未成功添加到DOM中。`);
         }
 
-        // 关闭按钮依然使用jQuery方便
         $('#eephone-close-modal-btn').on('click', closeEPhoneModal);
         $('#eephone-modal-overlay').on('click', (event) => {
             if ($(event.target).is('#eephone-modal-overlay')) {
@@ -166,15 +150,19 @@
                 const htmlContent = await response.text();
                 console.log(`[${PLUGIN_NAME}] eePhone.html 内容已成功获取 (大小: ${htmlContent.length} 字节).`);
 
+                // 使用 srcdoc 属性来设置 iframe 的内容
                 eephoneIframe.attr('srcdoc', htmlContent);
                 console.log(`[${PLUGIN_NAME}] eePhone.html 内容已通过 srcdoc 写入iframe。`);
 
                 eephoneIframe.on('load', () => {
                     console.log(`[${PLUGIN_NAME}] iframe 内容加载完成事件触发.`);
                     try {
+                        // 在 iframe 内部添加调试信息，可能会在浏览器控制台看到，但在 Termux 终端看不到
                         eephoneIframe[0].contentWindow.console.log('[EPhone] Iframe loaded from Silly Tavern plugin.');
+                        // 尝试在iframe内部执行一些简单的JS，确认其环境
+                        eephoneIframe[0].contentWindow.eval("console.log('EPhone: iframe内部脚本执行成功');");
                     } catch (e) {
-                        console.warn(`[${PLUGIN_NAME}] 无法访问iframe的contentWindow.console:`, e);
+                        console.warn(`[${PLUGIN_NAME}] 无法访问iframe的contentWindow.console 或执行内部脚本:`, e);
                     }
                 });
 
