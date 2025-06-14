@@ -1,0 +1,14 @@
+{
+  "name": "ee's Phone",
+  "description": "在Silly Tavern中显示邦邦卡邦小手机界面",
+  "version": "2.0.0",
+  "author": "ee",
+  "license": "MIT",
+  "homepage": "https://github.com/yourusername/ee-phone-plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ee-phone-plugin.git"
+  },
+  "main": "eePhone.js",
+  "icon": "icon.svg"
+}
